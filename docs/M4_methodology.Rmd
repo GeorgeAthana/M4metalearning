@@ -76,17 +76,17 @@ This section explains the learning model that produces the weights used to combi
 
 1. **Model for producing the mean forecasts:** In essence, it is a feature-based gradient tree boosting approach where the loss or error function to minimize is tailored to the OWI error used in the M4 competition. The implementation of gradient tree boosting is `xgboost`, a tool that is computationally efficient and allows a high degree of customization. The set of features is explained in the [next section](#features).
 
-2. **Model for producing the prediction intervals:** This method uses the mean forecasts (the result of our mean approach) as the center of the interval, and the finds a linear combination of the 95% prediction intervals of 3 forecasting methods in our original set, THETAF, NAIVE and SEASONAL NAIVE. One set of weights to combine this three intervals is produced per horizon, and is the same for all series, differing from the mean approach, where one set of weights is produced per series. The weights are calculated by minimizing the MSIS error of the linear combination of these three intervals in the training set.
+2. **Model for producing the prediction intervals:** This method uses the mean forecasts (the result of our mean approach) as the center of the interval, and the finds a linear combination of the 95% prediction intervals of 3 forecasting methods in our original set, THETAF, NAIVE and SEASONAL NAIVE. One set of weights to combine these three intervals is produced per horizon, and is the same for all series, differing from the mean approach, where one set of weights is produced per series. The weights are calculated by minimizing the MSIS error of the linear combination of these three intervals in the training set.
 
 ## Creating the training set
  In order to train the learning model, a dataset where the OWI errors of the methods can be measured is required. In our case, we applied temporal holdout to the available M4 dataset to create this training set. The specific temporal holdout procedure is as follows:
 
- * For each series in M4, we know its values, $x$ and the required forecasting horizon, $h$
- * We take the last $h$ observations from $x$ and use them as the true future values, $xx$ of the remaining observations of $x$, $r$.
- * We add $r$ with its correspoding true future values $xx$ to the training set.
+ * For each series $x$ in the M4, we know its values and the required forecasting horizon $h$.
+ * We take the last $h$ observations from $x$ and use them as the true future values. We denote these as  $xx$ and the remaining observations of $x$ as $r$.
+ * We add $r$ with the correspoding true future values $xx$ to the training set.
  * If $r$ has less than 7 observations, a smaller horizon is used.
  
-In this new training set we can apply the forecasting methods and measure their OWI errors in a scenario that will be 'close' to the real one. We call this training set `meta_M4`
+In this new training set we can apply the forecasting methods and measure their OWI errors in a scenario that will be 'close' to the real one. We call this training set `meta_M4`.
 
 ##Mean forecasts
 
